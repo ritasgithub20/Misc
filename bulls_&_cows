@@ -1,0 +1,54 @@
+def Init():
+    import random
+    # seteaza guessCount sa numere incercarile de a ghici numarul generat
+    guessCount = ['']
+    # genereaza numarul ascuns din 4 cifre
+    myNumber = random.randint(0, 9999)
+    # converteste numarul generat in string
+    myNumber = '{0:04d}'.format(myNumber)
+    return guessCount, myNumber
+
+
+def get_guess(guessCount):
+    guess = input('Introdu un numar: ')
+    # creste numarul incercarilor cu 1
+    guessCount.append(guess)
+    return guessCount
+
+
+# compara numarul ascuns cu incercarile utilizatorului
+def compare(guess, myNumber):
+
+    # COW - confirma ghicirea unui cifre gasite care se afla si pe pozitia corecta
+    # BULL - confirma ghicirea unui cifre gasite care nu se afla pe pozitia corecta
+
+    COW = 0 # initializarea variabilei COW
+    BULL = 0 # initializarea variabilei BULL
+
+    # se parcurge lungimea numarului cifra cu cifra
+    for i in range(len(guess)):
+        # daca prima pozitie a numarului ghicit coincide cu prima pozitie a numarului cautat
+        if guess[i] == myNumber[i]:
+            # BULL creste cu 1
+            BULL += 1
+            # daca numarul ghicit doar se gaseste in numarul ascuns, dar nu e pe pozitia corecta
+        if guess[i] in myNumber and guess[i] != myNumber[i]:
+            # COW creste cu 1
+            COW += 1
+    #BULL = BULL - COW
+    return COW, BULL
+
+# in functia principala
+def main():
+    guessCount, myNumber = Init()
+    # atata timp cat
+    while guessCount[-1] != myNumber:
+        guessCount = get_guess(guessCount)
+        COW, BULL = compare(guessCount[-1], myNumber)
+        print('{} cows, {} bulls'.format(COW, BULL))
+    print('Your are right! After {} guess(es) you finally get it!\nYour logs:'.format(len(guessCount) - 1),
+          guessCount[1:])
+
+
+if __name__ == "__main__":
+    main()
