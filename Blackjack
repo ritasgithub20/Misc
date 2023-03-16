@@ -1,0 +1,121 @@
+###########################################################################################
+############################### Regulile jocului BLACKJACK ################################
+###########################################################################################
+# todo avem un pachet normal de carti - 52 carti diferite - 13 carti de culori diferite:  #
+# todo ( trefla, romb, inima neagra, inima rosie)                                         #
+# todo calculatorul primeste doua carti random, dar utilizatorul poate vedea doar o carte #
+# todo optiunile utilizatorului sunt cele de STAND si HIT                                 #
+# todo calculatorul STANDS daca suma cartilor este >= 17                                  #
+# todo utilizatorul pierde daca:                                                          #
+# todo 1. suma cartilor este > 21                                                         #
+# todo 2. calculatorul are suma cartilor > decat suma utilizatorului si simultan <=21     #
+# todo optiune de DRAW dupa care se reia jocul                                            #
+###########################################################################################
+
+
+# functie de generare a cartilor si calculare a scorurilor
+def generateCards():
+    import itertools
+    import random
+
+    suits = ['♣', '♦', '♥', '♠']
+    names = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9,
+             '10': 10, 'J': 10, 'Q': 10, 'K': 10, 'A': 11}
+
+    # se face shuffle
+    deck = list(itertools.product(names, suits))
+    random.shuffle(deck)
+
+    # utilizatorul primeste doua carti random si i se calculeaza scorul
+    score_pl = 0
+    print("########################")
+    print("The player's cards are: ")
+    j = 2
+    for i in range(j):
+        print(">", deck[i][0], deck[i][1])
+        score_pl += names[deck[i][0]]
+        j += 1
+    print("Your score is: ", score_pl)
+    print("########################")
+
+    # computerul primeste doua carti random (una ascunsa) si i se calculeaza scorul care nu se afiseaza
+    score_comp = 0
+    print("########################")
+    print("The computer's cards are: ")
+    for i in range(j,j+1):
+        print(">", deck[i][0], deck[i][1])
+        j += 1
+    score_comp += names[deck[i][0]]
+    for i in range(j, j + 1):
+        # print(">", deck[i][0], deck[i][1])
+        print("> HIDDEN CARD")
+        j += 1
+    score_comp += names[deck[i][0]]
+    print("Computer's score is: ", score_comp)
+    print("########################")
+
+    # afisarea mesajelor de WIN si LOST in conditii exceptionale
+    # daca una din cele doua conditii este indeplinita, jocul se incheie
+    if score_pl == 21:
+        print('\033[92m','BLACKJACK! You won!')
+        exit()
+    if score_comp == 21:
+        print('\033[91m',"You lost!")
+        exit()
+
+    # pt cazul in care se continua jocul, se afiseaza optiunile HIT si STAND
+    user_input = input('HIT or STAND?: ').upper()
+    if user_input == 'STAND':
+        #print("Computer's score is: ", score_comp)
+        if score_comp < 17:
+            score_comp += names[deck[i][0]]
+            print("Computer's new score is: ", score_comp)
+            if score_comp > 21:
+                print('\033[92m','You won!')
+                exit()
+            elif score_comp >= 17 and score_comp <= 21:
+                print('Your turn.')
+            elif score_comp < score_pl:
+                print('\033[92m','You won!')
+                exit()
+            elif score_comp == score_pl:
+                print('It is a draw!')
+                exit()
+            else:
+                print('\033[91m','You lost!')
+                exit()
+        else:
+            print('\033[92m','You won!')
+            exit()
+    elif user_input == 'HIT':
+        for i in range(j, j+1):
+            score_pl += names[deck[i][0]]
+            j += 1
+    else:
+            print("Try again!")
+            exit()
+    if deck[i][0] == 'A':
+        print("\n" + str(deck[i][0]))
+        aceValue = input("1 or 11?\n>")
+        while aceValue != '1' or aceValue != '11':
+            if aceValue == '1':
+                return int(1)
+            elif aceValue == '11':
+                return int(11)
+            else:
+                num = input("1 or 11?\n>")
+    else:
+        print('Your next card is: ',  deck[i][0], deck[i][1])
+        print('Your new score is: ', '\033[1m', score_pl)
+    if score_pl == 21 or score_pl > score_comp:
+        print('\033[92m','You won!')
+        exit()
+    elif score_pl > 21:
+        print('\033[91m','You lost!')
+        exit()
+
+
+generateCards()
+
+
+
