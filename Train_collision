@@ -1,0 +1,29 @@
+# todo definim 2 trenuri ca si clasa
+# todo fiecare tren e definit de pozitie, directie si viteza
+# todo afisarea timpului scurs pana la coliziune
+# todo programul se intrerupe cand trenurile se intalnesc
+
+class Train:
+    def __init__(self, position, direction, speed):
+        self.position = position
+        self.direction = direction
+        self.speed = speed
+
+    def collision(self):
+        #if train1.position == train2.position:
+        if fly.position - train2.position == min():
+            print('collided')
+            exit()
+
+    def motion(self):
+            self.position = self.position + (self.direction * self.speed)
+
+train1 = Train(0, 1, 20)
+train2 = Train(100, -1, 40)
+fly = Train(0, 1, 100)
+
+for i in range(1,100):
+    train1.motion()
+    train2.motion()
+    print('Train1: ', train1.position,' ','Train2: ', train2.position)
+    train1.collision()
